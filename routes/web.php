@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -10,6 +11,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+Route::get('/account/login', [AccountController::class, 'login'])->name('account.login');
+Route::get('/account/register', [AccountController::class, 'register'])->name('account.register');
+Route::post('/account/register', [AccountController::class, 'registerUser'])->name('account.registerUser');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
