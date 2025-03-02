@@ -3,7 +3,7 @@
 @section('main')
 
 <section class="section-5">
-    <div class="container my-5">
+    <div class="container my-5 py-5">
         <div class="py-lg-2">&nbsp;</div>
 
         @if (Session::has('success'))
