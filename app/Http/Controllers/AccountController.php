@@ -7,6 +7,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -126,8 +127,13 @@ class AccountController extends Controller
             $imageName = Carbon::now()->timestamp . "." . $extension;
             $image->move(public_path("profiles"), $imageName);
 
+            // Remove old file
+            if (Auth::user()->image != "" || Auth::user()->image != null) {
+                File::delete(public_path("profiles/" . Auth::user()->image));
+            }
+            
             User::where('id', Auth::user()->id)->update(['image' => $imageName]);
-
+            
             session()->flash("success", "Profile pic updated successfully");
 
             return response()->json([
