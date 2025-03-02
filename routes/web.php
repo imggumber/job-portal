@@ -20,6 +20,7 @@ Route::prefix('account')->middleware([AuthenticateUser::class])->group(function 
     Route::get('/register', [AccountController::class, 'register'])->name('account.register');
     Route::post('/register', [AccountController::class, 'registerUser'])->name('account.registerUser');
     Route::get('/profile', [AccountController::class, 'profile'])->name('account.profile');
+    Route::put('/profile', [AccountController::class, 'updateProfile'])->name('account.updateProfile');
     Route::get('/logout', [AccountController::class, 'logout'])->name('account.logout');
 });
 
