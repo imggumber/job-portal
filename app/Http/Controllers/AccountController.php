@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -85,7 +86,7 @@ class AccountController extends Controller
 
         $validator = Validator::make($request->all(), [
             "name" => "required|string|max:120",
-            "email" => "required|email|unique:users,email,".$user_id.",id",
+            "email" => "required|email|unique:users,email," . $user_id . ",id",
             "designation" => "sometimes|nullable|string|max:120",
             "mobile" => "sometimes|nullable|numeric"
         ]);
@@ -105,11 +106,38 @@ class AccountController extends Controller
                 "status" => true,
                 "errors" => [],
             ]);
-
         } else {
             return response()->json([
                 "status" => false,
                 "errors" => $validator->errors(),
+            ]);
+        }
+    }
+
+    public function updateProfilePic(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|image|max:500'
+        ]);
+
+        if ($validator->passes()) {
+            $image = $request->image;
+            $extension = $image->getClientOriginalExtension();
+            $imageName = Carbon::now()->timestamp . "." . $extension;
+            $image->move(public_path("profiles"), $imageName);
+
+            User::where('id', Auth::user()->id)->update(['image' => $imageName]);
+
+            session()->flash("success", "Profile pic updated successfully");
+
+            return response()->json([
+                'status' => true,
+                'errors' => []
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
             ]);
         }
     }
