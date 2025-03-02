@@ -70,6 +70,7 @@
 			}
 		});
 
+		// Update profile pic modal
 		$("#proficPicForm").submit(function(e) {
 			e.preventDefault();
 
@@ -95,6 +96,44 @@
 						window.location.reload();
 					}
 				}
+			});
+		});
+
+		// Add new company
+		$("#addCompanyForm").submit(function(e) {
+			e.preventDefault();
+
+			$.ajax({
+				url: '{{ route("company.addCompany") }}',
+				type: 'post',
+				data: $("#addCompanyForm").serializeArray(),
+				dataType: 'json',
+				success: function(response) {
+					if (response.status == false) {
+						var errors = response.errors;
+						if (errors.companyName) {
+							$("#companyName").addClass("is-invalid").siblings("p").addClass("is-invalid-feedback").html(errors.companyName);
+						} else {
+							$("#companyName").removeClass("is-invalid").siblings("p").removeClass("is-invalid-feedback").html("");
+						}
+						if (errors.companyAddress) {
+							$("#companyAddress").addClass("is-invalid").siblings("p").addClass("is-invalid-feedback").html(errors.companyAddress);
+						} else {
+							$("#companyAddress").removeClass("is-invalid").siblings("p").removeClass("is-invalid-feedback").html("");
+						}
+						if (errors.companyWebsite) {
+							$("#companyWebsite").addClass("is-invalid").siblings("p").addClass("is-invalid-feedback").html(errors.companyWebsite);
+						} else {
+							$("#companyWebsite").removeClass("is-invalid").siblings("p").removeClass("is-invalid-feedback").html("");
+						}
+					} else {
+						$("#companyName").removeClass("is-invalid").siblings("p").removeClass("is-invalid-feedback").html("");
+						$("#companyAddress").removeClass("is-invalid").siblings("p").removeClass("is-invalid-feedback").html("");
+						$("#companyWebsite").removeClass("is-invalid").siblings("p").removeClass("is-invalid-feedback").html("");
+
+						window.location.reload();
+					} 
+				} 
 			});
 		});
 	</script>

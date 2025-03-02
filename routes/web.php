@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobListController;
 use App\Http\Controllers\ProfileController;
@@ -26,8 +27,12 @@ Route::prefix('account')->name('account.')->middleware([AuthenticateUser::class]
     Route::get('/logout', [AccountController::class, 'logout'])->name('logout');
 });
 
-Route::prefix('job')->name('job.')->middleware([AuthenticateUser::class])->group(function() {
+Route::prefix('job')->name('job.')->middleware([AuthenticateUser::class])->group(function () {
     Route::get('/post', [JobListController::class, 'index'])->name('job');
+});
+
+Route::name('company.')->middleware([AuthenticateUser::class])->group(function () {
+    Route::post('/add-company', [CompanyController::class, 'addCompany'])->name('addCompany');
 });
 
 Route::get('/dashboard', function () {
