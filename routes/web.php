@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JobListController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\AuthenticateUser;
 use Illuminate\Support\Facades\Route;
@@ -14,15 +15,19 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
 // Auth routes
-Route::prefix('account')->middleware([AuthenticateUser::class])->group(function () {
-    Route::get('/login', [AccountController::class, 'login'])->name('account.login');
-    Route::post('/login', [AccountController::class, 'loginUser'])->name('account.loginUser');
-    Route::get('/register', [AccountController::class, 'register'])->name('account.register');
-    Route::post('/register', [AccountController::class, 'registerUser'])->name('account.registerUser');
-    Route::get('/profile', [AccountController::class, 'profile'])->name('account.profile');
-    Route::put('/profile', [AccountController::class, 'updateProfile'])->name('account.updateProfile');
-    Route::post('/profile-pic', [AccountController::class, 'updateProfilePic'])->name('account.updateProfilePic');
-    Route::get('/logout', [AccountController::class, 'logout'])->name('account.logout');
+Route::prefix('account')->name('account.')->middleware([AuthenticateUser::class])->group(function () {
+    Route::get('/login', [AccountController::class, 'login'])->name('login');
+    Route::post('/login', [AccountController::class, 'loginUser'])->name('loginUser');
+    Route::get('/register', [AccountController::class, 'register'])->name('register');
+    Route::post('/register', [AccountController::class, 'registerUser'])->name('registerUser');
+    Route::get('/profile', [AccountController::class, 'profile'])->name('profile');
+    Route::put('/profile', [AccountController::class, 'updateProfile'])->name('updateProfile');
+    Route::post('/profile-pic', [AccountController::class, 'updateProfilePic'])->name('updateProfilePic');
+    Route::get('/logout', [AccountController::class, 'logout'])->name('logout');
+});
+
+Route::prefix('job')->name('job.')->middleware([AuthenticateUser::class])->group(function() {
+    Route::get('/post', [JobListController::class, 'index'])->name('job');
 });
 
 Route::get('/dashboard', function () {
