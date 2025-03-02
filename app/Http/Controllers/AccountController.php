@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -38,7 +39,6 @@ class AccountController extends Controller
                 'status' => true,
                 'errors' => [],
             ]);
-            
         } else {
             return response()->json([
                 'status' => false,
@@ -50,5 +50,34 @@ class AccountController extends Controller
     public function login()
     {
         return view('front.accounts.login');
+    }
+
+    public function loginUser(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            "email" => "required|email",
+            "password" => "required"
+        ]);
+
+        if ($validator->passes()) {
+            if (Auth::attempt(['email' => $request->email, 'password' => $request->password ])) {
+                return redirect()->route("account.profile");
+            } else {
+                return redirect()->route("account.login")->with("error", "Invalid credentials")->withInput($request->only('email'));
+            }
+        } else {
+            return redirect()->route("account.login")->withErrors($validator)->withInput($request->only('email'));
+        }
+    }
+
+    public function profile()
+    {
+        return view('front.accounts.profile');
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route("account.login")->with('success', 'Logout successfully');
     }
 }

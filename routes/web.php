@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Middleware\AuthenticateUser;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
@@ -11,9 +12,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
-Route::get('/account/login', [AccountController::class, 'login'])->name('account.login');
-Route::get('/account/register', [AccountController::class, 'register'])->name('account.register');
-Route::post('/account/register', [AccountController::class, 'registerUser'])->name('account.registerUser');
+
+// Auth routes
+Route::prefix('account')->middleware([AuthenticateUser::class])->group(function () {
+    Route::get('/login', [AccountController::class, 'login'])->name('account.login');
+    Route::post('/login', [AccountController::class, 'loginUser'])->name('account.loginUser');
+    Route::get('/register', [AccountController::class, 'register'])->name('account.register');
+    Route::post('/register', [AccountController::class, 'registerUser'])->name('account.registerUser');
+    Route::get('/profile', [AccountController::class, 'profile'])->name('account.profile');
+    Route::get('/logout', [AccountController::class, 'logout'])->name('account.logout');
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -25,4 +33,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
