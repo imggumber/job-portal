@@ -19,7 +19,7 @@
                 <a href="account.html">Account Settings</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <a href="post-job.html">Companies</a>
+                <a href="{{ route('company.allCompanies') }}">Companies</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <a href="post-job.html">Post a Job</a>

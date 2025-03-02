@@ -52,6 +52,9 @@
 	<!-- Add company modal -->
 	@include('front.partials.modals.add-company')
 
+	<!-- View Company modal -->
+	@include('front.partials.modals.view-company')
+
 	<footer class="bg-dark py-3 bg-2">
 		<div class="container">
 			<p class="text-center text-white pt-3 fw-bold fs-6">&copy; @php echo date('Y') ."-". (date('Y') + 1) @endphp {{ env("APP_NAME") }} - All Right Reserved</p>

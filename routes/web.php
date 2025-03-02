@@ -32,7 +32,9 @@ Route::prefix('job')->name('job.')->middleware([AuthenticateUser::class])->group
 });
 
 Route::name('company.')->middleware([AuthenticateUser::class])->group(function () {
+    Route::get('/all-companies', [CompanyController::class, 'allCompanies'])->name('allCompanies');
     Route::post('/add-company', [CompanyController::class, 'addCompany'])->name('addCompany');
+    Route::get('/company/{id}', [CompanyController::class, 'getCompany'])->name('getCompany');
 });
 
 Route::get('/dashboard', function () {

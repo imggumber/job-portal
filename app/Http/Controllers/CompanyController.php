@@ -9,6 +9,28 @@ use Illuminate\Support\Facades\Validator;
 
 class CompanyController extends Controller
 {
+    public function allCompanies()
+    {
+        $companies = Company::select('id', 'name', 'website', 'location')->get();
+        return view('front.company.company', compact('companies'));
+    }
+
+    public function getCompany($id = null)
+    {
+        $company = Company::select('name', 'website', 'location')->where('id', $id)->first();
+        if (!$company) {
+            return response()->json([
+                'status' => false,
+                'data'   => []
+            ]);
+        } else {
+            return response()->json([
+                'status' => true,
+                'data'   => $company,
+            ]);
+        }
+    }
+
     public function addCompany(Request $request)
     {
         $validator = Validator::make($request->all(), [

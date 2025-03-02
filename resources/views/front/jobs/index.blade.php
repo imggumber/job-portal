@@ -24,7 +24,7 @@
                 @if (count($data['companies']) == 0)
                     <p>Add a new company to list a job post.</p>
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCompanyModal">
-                        Create Company
+                        Add Company
                     </button>
                 @else
                     @include('front.partials.job-form')
