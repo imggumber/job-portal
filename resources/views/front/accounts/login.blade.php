@@ -5,21 +5,11 @@
 <section class="section-5">
     <div class="container my-5 py-5">
         <div class="py-lg-2">&nbsp;</div>
-
-        @if (Session::has('success'))
-            <div class="alert alert-success">
-                <p>{{ Session::get('success') }}</p>
-            </div>
-        @endif
-
-        @if (Session::has('error'))
-            <div class="alert alert-danger">
-                <p>{{ Session::get('error') }}</p>
-            </div>
-        @endif
-
         <div class="row d-flex justify-content-center">
             <div class="col-md-5">
+                <div class="text-center">
+                    @include('front.messages.message')
+                </div>
                 <div class="card shadow border-0 p-5">
                     <h1 class="h3">Login</h1>
                     <form action="{{ route('account.loginUser') }}" method="post"> @csrf
