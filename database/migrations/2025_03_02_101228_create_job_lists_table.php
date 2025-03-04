@@ -36,9 +36,6 @@ return new class extends Migration
         Schema::create('job_lists', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
-            $table->foreignId('job_type_id')->constrained()->onDelete('cascade');
-            $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
             $table->integer('vacancy');
             $table->string('salary')->nullable();
             $table->string('location')->nullable();
@@ -48,6 +45,9 @@ return new class extends Migration
             $table->mediumText('qualifications')->nullable();
             $table->mediumText('keywords')->nullable();
             $table->integer('experience');
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->foreignId('job_type_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->comment("Job posted by");
             $table->timestamps();
         });
     }
