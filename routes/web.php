@@ -29,6 +29,7 @@ Route::prefix('account')->name('account.')->middleware([AuthenticateUser::class]
 
 Route::prefix('job')->name('job.')->middleware([AuthenticateUser::class])->group(function () {
     Route::get('/post', [JobListController::class, 'index'])->name('job');
+    Route::post('/post', [JobListController::class, 'createJob'])->name('createJob');
 });
 
 Route::name('company.')->middleware([AuthenticateUser::class])->group(function () {
