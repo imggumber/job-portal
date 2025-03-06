@@ -1,9 +1,14 @@
 @include('front.messages.message')
 
 @php
-    $titleErr = "";
+    $titleErr = $categoryErr = $vacancyErr = $descriptionErr = $companyErr = $jobtypeErr = "";
     if ($errors->any()) {
         $titleErr = $errors->first('title');
+        $categoryErr = $errors->first('category');
+        $vacancyErr = $errors->first('vacancy');
+        $descriptionErr = $errors->first('description');
+        $companyErr = $errors->first('company');
+        $jobtypeErr = $errors->first('job_type');
     }
 @endphp
 
@@ -23,12 +28,12 @@
                     <select name="category" id="category" class="form-control">
                         <option value="">Select a Category</option>
                         @if (count($data['categories']) > 0)
-                        @foreach ($data['categories'] as $catgory)
-                        <option value="{{ $catgory['id'] }}">{{ $catgory['name'] }}</option>
-                        @endforeach
+                            @foreach ($data['categories'] as $catgory)
+                                <option value="{{ $catgory['id'] }}">{{ $catgory['name'] }}</option>
+                            @endforeach
                         @endif
-
                     </select>
+                    @if (!empty($categoryErr))<p class="text-danger form-text">{{ $categoryErr }}</p>@endif
                 </div>
             </div>
 
@@ -38,15 +43,17 @@
                     <select class="form-select">
                         <option value="">Select a job nature</option>
                         @if (count($data['job_types']) > 0)
-                        @foreach ($data['job_types'] as $job_type)
-                        <option value="{{ $job_type['id'] }}">{{ $job_type['name'] }}</option>
-                        @endforeach
+                            @foreach ($data['job_types'] as $job_type)
+                                <option value="{{ $job_type['id'] }}">{{ $job_type['name'] }}</option>
+                            @endforeach
                         @endif
                     </select>
+                    @if (!empty($jobtypeErr))<p class="text-danger form-text">{{ $jobtypeErr }}</p>@endif
                 </div>
                 <div class="col-md-6  mb-4">
                     <label for="" class="mb-2">Vacancy<span class="req">*</span></label>
                     <input type="number" min="1" placeholder="Vacancy" id="vacancy" name="vacancy" class="form-control">
+                    @if (!empty($vacancyErr))<p class="text-danger form-text">{{ $vacancyErr }}</p>@endif
                 </div>
             </div>
 
@@ -65,6 +72,7 @@
             <div class="mb-4">
                 <label for="" class="mb-2">Description<span class="req">*</span></label>
                 <textarea class="form-control" name="description" id="description" cols="5" rows="5" placeholder="Description"></textarea>
+                @if (!empty($descriptionErr))<p class="text-danger form-text">{{ $descriptionErr }}</p>@endif
             </div>
             <div class="mb-4">
                 <label for="" class="mb-2">Benefits</label>
@@ -91,17 +99,17 @@
             </div>
 
             <h3 class="fs-4 mb-1 mt-5 border-top pt-5">Select Company</h3>
-
             <div class="row">
                 <div class="col-12 mb-4">
                     <select class="form-select company" id="company" name="company">
                         <option value="">Select company</option>
                         @if (count($data['companies']) > 0)
-                        @foreach ($data['companies'] as $company)
-                        <option value="{{ $company['id'] }}">{{ $company['name'] }}</option>
-                        @endforeach
+                            @foreach ($data['companies'] as $company)
+                                <option value="{{ $company['id'] }}">{{ $company['name'] }}</option>
+                            @endforeach
                         @endif
                     </select>
+                    @if (!empty($companyErr))<p class="text-danger form-text">{{$companyErr}}</p>@endif
                 </div>
             </div>
             <div class="card-footer p-4">
