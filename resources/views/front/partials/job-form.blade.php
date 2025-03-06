@@ -71,7 +71,7 @@
 
             <div class="mb-4">
                 <label for="" class="mb-2">Description<span class="req">*</span></label>
-                <textarea class="form-control" name="description" id="description" cols="5" rows="5" placeholder="Description"></textarea>
+                <textarea class="form-control @if (!empty($descriptionErr)) {{'is-invalid'}} @endif" name="description" id="description" cols="5" rows="5" placeholder="Description"></textarea>
                 @if (!empty($descriptionErr))<p class="text-danger form-text">{{ $descriptionErr }}</p>@endif
             </div>
             <div class="mb-4">
