@@ -1,7 +1,7 @@
 @include('front.messages.message')
 
 @php
-    $titleErr = $categoryErr = $vacancyErr = $descriptionErr = $companyErr = $jobtypeErr = "";
+    $titleErr = $categoryErr = $vacancyErr = $descriptionErr = $companyErr = $jobtypeErr = $salaryErr = "";
     if ($errors->any()) {
         $titleErr = $errors->first('title');
         $categoryErr = $errors->first('category');
@@ -9,6 +9,7 @@
         $descriptionErr = $errors->first('description');
         $companyErr = $errors->first('company');
         $jobtypeErr = $errors->first('job_type');
+        $salaryErr = $errors->first('salary');
     }
 @endphp
 
@@ -40,7 +41,7 @@
             <div class="row">
                 <div class="col-md-6 mb-4">
                     <label for="" class="mb-2">Job Nature<span class="req">*</span></label>
-                    <select class="form-select">
+                    <select class="form-select" name="job_type">
                         <option value="">Select a job nature</option>
                         @if (count($data['job_types']) > 0)
                             @foreach ($data['job_types'] as $job_type)
@@ -52,7 +53,7 @@
                 </div>
                 <div class="col-md-6  mb-4">
                     <label for="" class="mb-2">Vacancy<span class="req">*</span></label>
-                    <input type="number" min="1" placeholder="Vacancy" id="vacancy" name="vacancy" class="form-control">
+                    <input type="number" min="1" placeholder="Vacancy" id="vacancy" name="vacancy" class="form-control @if (!empty($vacancyErr)) {{'is-invalid'}} @endif">
                     @if (!empty($vacancyErr))<p class="text-danger form-text">{{ $vacancyErr }}</p>@endif
                 </div>
             </div>
@@ -60,7 +61,8 @@
             <div class="row">
                 <div class="mb-4 col-md-6">
                     <label for="" class="mb-2">Salary</label>
-                    <input type="text" placeholder="Salary" id="salary" name="salary" class="form-control">
+                    <input type="text" placeholder="Salary" id="salary" name="salary" class="form-control @if (!empty($salaryErr)) {{'is-invalid'}} @endif">
+                    @if (!empty($salaryErr))<p class="text-danger form-text">{{ $salaryErr }}</p>@endif
                 </div>
 
                 <div class="mb-4 col-md-6">
