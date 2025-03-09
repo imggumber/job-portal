@@ -19,9 +19,7 @@
                 @include('front.accounts.sidebar')
             </div>
             <div class="col-lg-9">
-                @if (Session::has('success'))
-                <p class="alert alert-success p-2">{{ Session::get('success') }}</p>
-                @endif
+                @include('front.messages.message')
                 <div class="mb-3 row">
                     <div class="col-12 text-end">
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCompanyModal">

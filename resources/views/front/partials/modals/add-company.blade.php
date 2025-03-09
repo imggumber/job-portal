@@ -23,6 +23,7 @@
 								<input type="text" placeholder="Enter company website" class="companyWebsite form-control" id="companyWebsite" name="companyWebsite">
 								<p></p>
 							</div>
+							<span id="company-exists" class="fs-6 text-danger mb-2"></span>
 						</div>
 						<div class="d-flex justify-content-end">
 							<button type="submit" class="btn btn-primary mx-3">Add Company</button>

@@ -39,14 +39,26 @@ class CompanyController extends Controller
             'companyWebsite' => 'nullable|url:https',
         ]);
 
+        $companySlug = str_replace(" ", "-", $request->companyName);
+
+        $companyExists = Company::where('slug', $companySlug)->first();
+
+        if ($companyExists) {
+            return response()->json([
+                'status' => false,
+                'errors' => ["slug" => "Company already exists"],
+            ]);
+        }
+
         if ($validator->passes()) {
             Company::create([
                 'name' => $request->companyName,
+                'slug' => $companySlug,
                 'location' => $request->companyAddress,
                 'website' => $request->companyWebsite,
             ]);
 
-            session()->flash('message', 'Company added successfully');
+            session()->flash('success', 'Company added successfully');
 
             return response()->json([
                 'status' => true,
