@@ -144,10 +144,16 @@
 						} else {
 							$("#companyWebsite").removeClass("is-invalid").siblings("p").removeClass("is-invalid-feedback").html("");
 						}
+						if (errors.slug) {
+							$("#company-exists").addClass("is-invalid").html(errors.slug);
+						} else {
+							$("#company-exists").removeClass("is-invalid").html("");
+						}
 					} else {
 						$("#companyName").removeClass("is-invalid").siblings("p").removeClass("is-invalid-feedback").html("");
 						$("#companyAddress").removeClass("is-invalid").siblings("p").removeClass("is-invalid-feedback").html("");
 						$("#companyWebsite").removeClass("is-invalid").siblings("p").removeClass("is-invalid-feedback").html("");
+						$("#company-exists").removeClass("is-invalid").html("");
 
 						window.location.reload();
 					}
@@ -155,6 +161,7 @@
 			});
 		});
 
+		// Toaster
 		var toastElList = [].slice.call(document.querySelectorAll('.toast'));
 		var toastList = toastElList.map(function(toastEl) {
 			var toast = new bootstrap.Toast(toastEl); 

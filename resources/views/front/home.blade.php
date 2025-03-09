@@ -26,10 +26,11 @@
                 <div class="col-md-3 mb-3 mb-sm-3 mb-lg-0">
                     <select name="category" id="category" class="form-control">
                         <option value="">Select a Category</option>
-                        <option value="">Engineering</option>
-                        <option value="">Accountant</option>
-                        <option value="">Information Technology</option>
-                        <option value="">Fashion designing</option>
+                        @if (count($list) > 0)
+                            @foreach ($list as $lt)
+                                <option value="{{ $lt['id'] }}">{{ $lt['name'] }}</option>
+                            @endforeach
+                        @endif
                     </select>
                 </div>
 
@@ -44,77 +45,32 @@
     </div>
 </section>
 
-<section class="section-2 bg-2 py-5">
-    <div class="container">
-        <h2>Popular Categories</h2>
-        <div class="row pt-5">
-            <div class="col-lg-4 col-xl-3 col-md-6">
-                <div class="single_catagory">
-                    <a href="jobs.html">
-                        <h4 class="pb-2">Design &amp; Creative</h4>
-                    </a>
-                    <p class="mb-0"> <span>50</span> Available position</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-xl-3 col-md-6">
-                <div class="single_catagory">
-                    <a href="jobs.html">
-                        <h4 class="pb-2">Finance</h4>
-                    </a>
-                    <p class="mb-0"> <span>50</span> Available position</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-xl-3 col-md-6">
-                <div class="single_catagory">
-                    <a href="jobs.html">
-                        <h4 class="pb-2">Banking</h4>
-                    </a>
-                    <p class="mb-0"> <span>50</span> Available position</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-xl-3 col-md-6">
-                <div class="single_catagory">
-                    <a href="jobs.html">
-                        <h4 class="pb-2">Data Science</h4>
-                    </a>
-                    <p class="mb-0"> <span>50</span> Available position</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-xl-3 col-md-6">
-                <div class="single_catagory">
-                    <a href="jobs.html">
-                        <h4 class="pb-2">Marketing</h4>
-                    </a>
-                    <p class="mb-0"> <span>50</span> Available position</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-xl-3 col-md-6">
-                <div class="single_catagory">
-                    <a href="jobs.html">
-                        <h4 class="pb-2">Digital Marketing</h4>
-                    </a>
-                    <p class="mb-0"> <span>50</span> Available position</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-xl-3 col-md-6">
-                <div class="single_catagory">
-                    <a href="jobs.html">
-                        <h4 class="pb-2">Digital Marketing</h4>
-                    </a>
-                    <p class="mb-0"> <span>50</span> Available position</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-xl-3 col-md-6">
-                <div class="single_catagory">
-                    <a href="jobs.html">
-                        <h4 class="pb-2">Digital Marketing</h4>
-                    </a>
-                    <p class="mb-0"> <span>50</span> Available position</p>
-                </div>
+
+@if (count($list) > 0)
+    <section class="section-2 bg-2 py-5">
+        <div class="container">
+            <h2>Popular Categories</h2>
+            <div class="row pt-5">
+                @foreach ($list as $lt)
+                    <div class="col-lg-4 col-xl-3 col-md-6">
+                        <div class="single_catagory">
+                            <a href="{{ $lt['id'] }}">
+                                <h4 class="pb-2">{{ $lt['name'] }}</h4>
+                            </a>
+                            @if ($lt['count'] == 1)
+                                <p class="mb-0"> <span>{{ $lt['count'] }}</span> vacancy available</p>
+                                @elseif ($lt['count'] > 1)
+                                <p class="mb-0"> <span>{{ $lt['count'] }}</span> vacancies available</p>
+                                @else
+                                <p class="mb-0"></p>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
             </div>
         </div>
-    </div>
-</section>
+    </section>
+@endif
 
 <section class="section-3  py-5">
     <div class="container">
