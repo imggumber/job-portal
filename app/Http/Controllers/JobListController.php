@@ -8,6 +8,7 @@ use App\Models\Company;
 use App\Models\CompanyJob;
 use App\Models\JobList;
 use App\Models\JobType;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -77,7 +78,7 @@ class JobListController extends Controller
                 ]);
 
                 DB::commit();
-                return Redirect::back()->with('success', 'Job saved successfully');
+                return Redirect::to(route('job.myJobs'))->with('success', 'Job saved successfully');
             } catch (\Exception $e) {
                 DB::rollBack();
                 Log::alert($e->getMessage());
@@ -86,5 +87,23 @@ class JobListController extends Controller
         } else {
             return Redirect::back()->withInput($request->all())->with(['errors' => $validator->errors()]);
         }
+    }
+
+    public function myJobs()
+    {
+        $allJobs = JobList::where('user_id', Auth::user()->id)->get();
+        $jobs = [];
+        foreach ($allJobs as $key => $job) {
+            $category = Category::select('name')->where('id', $job['location'])->first();
+            $jobType = JobType::select('name')->where('id', $job['job_type_id'])->first();
+            $jobs[$key]['id'] = $job['id'];
+            $jobs[$key]['title'] = $job['title'];
+            $jobs[$key]['location'] = $job['location'];
+            $jobs[$key]['category'] = isset($category->name) ? $category->name : "";
+            $jobs[$key]['job_type'] = isset($jobType->name) ? $jobType->name : "";
+            $jobs[$key]['created_at'] = Carbon::parse($job['created_at'])->toFormattedDateString();
+        }
+
+        return view('front.jobs.myjobs', compact('jobs'));
     }
 }
