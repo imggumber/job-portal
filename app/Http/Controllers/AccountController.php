@@ -7,8 +7,11 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
 class AccountController extends Controller
@@ -131,9 +134,9 @@ class AccountController extends Controller
             if (Auth::user()->image != "" || Auth::user()->image != null) {
                 File::delete(public_path("profiles/" . Auth::user()->image));
             }
-            
+
             User::where('id', Auth::user()->id)->update(['image' => $imageName]);
-            
+
             session()->flash("success", "Profile pic updated successfully");
 
             return response()->json([
@@ -152,5 +155,42 @@ class AccountController extends Controller
     {
         Auth::logout();
         return redirect()->route("account.login");
+    }
+
+    public function changePassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'old_password' => 'required',
+            'password' => 'required|min:6|confirmed',
+            'password_confirmation' => 'required|min:6',
+        ], [
+            'old_password.required' => 'Enter your old password',
+            'password.required' => 'Enter your new password',
+            'password.required' => 'Enter your new password',
+            'password_confirmation.required' => 'Re-enter your new password',
+            'password_confirmation.min' => 'The confirm password field must be at least 6 characters.',
+        ]);
+
+        if ($validator->passes()) {
+            // Check if requested old password is same as saved password
+            $oldPassword = User::select('password')->where('id', Auth::user()->id)->first();
+            $checkOldPassword = Hash::check($request->old_password, $oldPassword->password);
+            if ($checkOldPassword) {
+                DB::beginTransaction();
+                try {
+                    User::where('id', Auth::user()->id)->update(['password' => Hash::make($request->password)]);
+                    DB::commit();
+                    return Redirect::back()->with('success', 'Password updated successfully');
+                } catch (\Exception $e) {
+                    DB::rollBack();
+                    Log::alert($e->getMessage());
+                    return Redirect::back()->with('error', 'Internal Server Error');
+                }
+            } else {
+                return Redirect::back()->with('error', 'Incorrect old password');
+            }
+        } else {
+            return Redirect::back()->with(['errors' => $validator->errors()]);
+        }
     }
 }

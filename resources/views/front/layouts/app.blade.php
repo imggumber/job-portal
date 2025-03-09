@@ -14,6 +14,16 @@
 	<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css')}}" />
 	<!-- Fav Icon -->
 	<link rel="shortcut icon" type="image/x-icon" href="#" />
+
+	<style>
+		.toast {
+			transition: opacity 4s ease-in-out;
+		}
+
+		.toast.fade {
+			opacity: 0 !important;
+		}
+	</style>
 </head>
 
 <body data-instant-intensity="mousedown">
@@ -44,16 +54,21 @@
 		</nav>
 	</header>
 
-	@yield('main')
+	<main class="position-relative">
+		@include('front.messages.message')
 
-	<!-- Add profile picture model -->
-	@include('front.partials.modals.add-profile')
+		@yield('main')
 
-	<!-- Add company modal -->
-	@include('front.partials.modals.add-company')
+		<!-- Add profile picture model -->
+		@include('front.partials.modals.add-profile')
 
-	<!-- View Company modal -->
-	@include('front.partials.modals.view-company')
+		<!-- Add company modal -->
+		@include('front.partials.modals.add-company')
+
+		<!-- View Company modal -->
+		@include('front.partials.modals.view-company')
+
+	</main>
 
 	<footer class="bg-dark py-3 bg-2">
 		<div class="container">
@@ -135,9 +150,24 @@
 						$("#companyWebsite").removeClass("is-invalid").siblings("p").removeClass("is-invalid-feedback").html("");
 
 						window.location.reload();
-					} 
-				} 
+					}
+				}
 			});
+		});
+
+		var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+		var toastList = toastElList.map(function(toastEl) {
+			var toast = new bootstrap.Toast(toastEl); 
+			toast.show(); 
+
+			setTimeout(function() {
+				toastEl.classList.add('fade'); 
+				setTimeout(function() {
+					toast.hide(); 
+				}, 5000); 
+			}, 3000); 
+
+			return toast;
 		});
 	</script>
 

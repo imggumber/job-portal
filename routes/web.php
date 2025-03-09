@@ -25,6 +25,7 @@ Route::prefix('account')->name('account.')->middleware([AuthenticateUser::class]
     Route::put('/profile', [AccountController::class, 'updateProfile'])->name('updateProfile');
     Route::post('/profile-pic', [AccountController::class, 'updateProfilePic'])->name('updateProfilePic');
     Route::get('/logout', [AccountController::class, 'logout'])->name('logout');
+    Route::post('/change-password', [AccountController::class, 'changePassword'])->name('changePassword');
 });
 
 Route::prefix('job')->name('job.')->middleware([AuthenticateUser::class])->group(function () {

@@ -1,5 +1,13 @@
 @extends('front.layouts.app')
 
+@php
+    $oldPasswordErr = $passwordErr = $passwordConfirmationErr = "";
+    if ($errors->any()) {
+        $oldPasswordErr = $errors->first('old_password');
+        $passwordErr = $errors->first('password');
+        $passwordConfirmationErr = $errors->first('password_confirmation');
+    }
+@endphp
 
 @section('main')
 
@@ -20,9 +28,6 @@
                 @include('front.accounts.sidebar')
             </div>
             <div class="col-lg-9">
-                @if (Session::has('success'))
-                   <p class="alert alert-success p-2">{{ Session::get('success') }}</p>
-                @endif
                 <div class="card border-0 shadow mb-4">
                     <form action="" method="post" name="userForm" class="userForm" id="userForm">
                         <div class="card-body  p-4">
@@ -55,24 +60,29 @@
                 </div>
 
                 <div class="card border-0 shadow mb-4">
-                    <div class="card-body p-4">
-                        <h3 class="fs-4 mb-1">Change Password</h3>
-                        <div class="mb-4">
-                            <label for="" class="mb-2">Old Password*</label>
-                            <input type="password" placeholder="Old Password" class="form-control">
+                    <form action="{{ route('account.changePassword') }}" method="post"> @csrf
+                        <div class="card-body p-4">
+                            <h3 class="fs-4 mb-1">Change Password</h3>
+                            <div class="mb-4">
+                                <label for="" class="mb-2">Old Password*</label>
+                                <input type="password" placeholder="Old Password" name="old_password" class="form-control @if (!empty($oldPasswordErr)) {{'is-invalid'}} @endif">
+                                @if (!empty($oldPasswordErr))<p class="text-danger form-text">{{ $oldPasswordErr }}</p>@endif
+                            </div>
+                            <div class="mb-4">
+                                <label for="" class="mb-2">New Password*</label>
+                                <input type="password" placeholder="New Password" name="password" class="form-control @if (!empty($passwordErr)) {{'is-invalid'}} @endif">
+                                @if (!empty($passwordErr))<p class="text-danger form-text">{{ $passwordErr }}</p>@endif
+                            </div>
+                            <div class="mb-4">
+                                <label for="" class="mb-2">Confirm Password*</label>
+                                <input type="password" placeholder="Confirm Password" name="password_confirmation" class="form-control @if (!empty($passwordConfirmationErr)) {{'is-invalid'}} @endif">
+                                @if (!empty($passwordConfirmationErr))<p class="text-danger form-text">{{ $passwordConfirmationErr }}</p>@endif
+                            </div>
                         </div>
-                        <div class="mb-4">
-                            <label for="" class="mb-2">New Password*</label>
-                            <input type="password" placeholder="New Password" class="form-control">
+                        <div class="card-footer  p-4">
+                            <button type="submit" class="btn btn-primary">Update</button>
                         </div>
-                        <div class="mb-4">
-                            <label for="" class="mb-2">Confirm Password*</label>
-                            <input type="password" placeholder="Confirm Password" class="form-control">
-                        </div>
-                    </div>
-                    <div class="card-footer  p-4">
-                        <button type="button" class="btn btn-primary">Update</button>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
