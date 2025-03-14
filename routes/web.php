@@ -32,6 +32,7 @@ Route::prefix('job')->name('job.')->middleware([AuthenticateUser::class])->group
     Route::get('/post', [JobListController::class, 'index'])->name('job');
     Route::post('/post', [JobListController::class, 'createJob'])->name('createJob');
     Route::get('/my-jobs', [JobListController::class, 'myJobs'])->name('myJobs');
+    Route::delete('/{id}', [JobListController::class, 'delJob'])->name('delJob');
 });
 
 Route::name('company.')->middleware([AuthenticateUser::class])->group(function () {

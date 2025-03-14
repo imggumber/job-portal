@@ -106,4 +106,16 @@ class JobListController extends Controller
 
         return view('front.jobs.myjobs', compact('jobs'));
     }
+
+    public function delJob($id)
+    {
+        $job = JobList::select('title')->where('id', $id)->where('user_id', Auth::user()->id)->first();
+        $title = isset($job['title']) && !empty($job['title']) ? $job['title'] : "Job";
+        if ($job) {
+            JobList::where('id', $id)->where('user_id', Auth::user()->id)->delete();
+            return redirect()->back()->with('success', ucwords($title) . ' deleted successfully');
+        } else {
+            return redirect()->back()->with('error', 'Fail to delete record');
+        }
+    }
 }

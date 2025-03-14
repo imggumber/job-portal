@@ -58,7 +58,12 @@
                                                     <ul class="dropdown-menu dropdown-menu-end">
                                                         <li><a class="dropdown-item" href="{{ $job['id'] }}"> <i class="fa fa-eye" aria-hidden="true"></i> View</a></li>
                                                         <li><a class="dropdown-item" href="{{ $job['id'] }}"><i class="fa fa-edit" aria-hidden="true"></i> Edit</a></li>
-                                                        <li><a class="dropdown-item" href="{{ $job['id'] }}"><i class="fa fa-trash" aria-hidden="true"></i> Remove</a></li>
+                                                        <li>
+                                                            <form action="{{ route('job.delJob', ['id' => $job['id']]) }}" method="post"> @csrf
+                                                                @method('delete')
+                                                                <button class="btn btn-danger w-100 rounded-0"><i class="fa fa-trash me-1" aria-hidden="true"></i> Remove</button>
+                                                            </form>
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </td>
