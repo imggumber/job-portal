@@ -39,7 +39,7 @@ class CompanyController extends Controller
             'companyWebsite' => 'nullable|url:https',
         ]);
 
-        $companySlug = str_replace(" ", "-", $request->companyName);
+        $companySlug = str_replace(" ", "-", strtolower($request->companyName));
 
         $companyExists = Company::where('slug', $companySlug)->first();
 
