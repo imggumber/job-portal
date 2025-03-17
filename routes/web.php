@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AppliedJobController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobListController;
@@ -33,6 +34,11 @@ Route::prefix('job')->name('job.')->middleware([AuthenticateUser::class])->group
     Route::post('/post', [JobListController::class, 'createJob'])->name('createJob');
     Route::get('/my-jobs', [JobListController::class, 'myJobs'])->name('myJobs');
     Route::delete('/{id}', [JobListController::class, 'delJob'])->name('delJob');
+    Route::get('/jobs-applied', [JobListController::class, 'appliedJob'])->name('appliedJob');
+});
+
+Route::prefix('apply')->name('jobapplied.')->middleware([AuthenticateUser::class])->group(function () {
+    Route::get('/', [AppliedJobController::class, 'appliedJob'])->name('appliedJob');
 });
 
 Route::name('company.')->middleware([AuthenticateUser::class])->group(function () {
