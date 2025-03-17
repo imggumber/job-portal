@@ -34,6 +34,12 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('job_statuses', function (Blueprint $table) {
+            $table->id();
+            $table->string('status', length: 200);
+            $table->timestamps();
+        });
+
         Schema::create('job_lists', function (Blueprint $table) {
             $table->id();
             $table->string('title');
@@ -51,6 +57,21 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->comment("Job posted by");
             $table->timestamps();
         });
+
+        Schema::create('jobs_list_statuses', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('job_id')->constrained('job_lists')->onDelete('cascade');
+            $table->foreignId('job_status_id')->constrained('job_statuses')->onDelete('cascade');
+        });
+
+        Schema::create('applied_jobs', function (Blueprint $table) {
+            $table->id();
+            $table->date('applied_on');
+            $table->foreignId('job_status_id')->constrained('job_statuses')->onDelete('cascade');
+            $table->foreignId('job_id')->constrained('job_lists')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -58,7 +79,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('applied_jobs');
+        Schema::dropIfExists('jobs_list_statuses');
         Schema::dropIfExists('job_lists');
+        Schema::dropIfExists('job_statuses');
         Schema::dropIfExists('companies');
         Schema::dropIfExists('job_types');
         Schema::dropIfExists('categories');
