@@ -27,7 +27,7 @@
                             </div>
                             <div style="margin-top: -10px;">
                                 <a href="{{ route('job.job') }}" class="btn btn-primary">{{__('Post a Job')}}</a>
-                                <a href="{{ route('job.archiveJobs') }}" class="btn btn-primary">{{__('Archived')}}</a>
+                                <a href="{{ route('job.archiveJobs') }}" class="btn btn-dark">{{__('Archived')}}</a>
                             </div>
                         </div>
                         <div class="table-responsive">
