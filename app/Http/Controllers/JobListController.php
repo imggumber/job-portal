@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
 
 class JobListController extends Controller
@@ -124,5 +125,18 @@ class JobListController extends Controller
         } else {
             return redirect()->back()->with('error', 'Fail to delete record');
         }
+    }
+
+    public function expireJob($id)
+    {
+        JobsListStatus::where('job_id', $id)->update([
+            'job_status_id' => 3,
+            'updated_at' => now(),
+        ]);
+
+        return response()->json([
+            "status" => true,
+            "message" => "Job status updated successfully",
+        ]);
     }
 }
