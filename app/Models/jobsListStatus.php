@@ -14,5 +14,14 @@ class JobsListStatus extends Model
         'created_at',
         'updated_at',
     ];
-}
 
+    public function jobList()
+    {
+        $this->belongsTo(JobList::class, 'job_id');
+    }
+
+    public function JobStatus()
+    {
+        $this->belongsTo(JobsListStatus::class, 'job_status_id');
+    }
+}
