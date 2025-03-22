@@ -26,9 +26,9 @@
                                 <h3 class="fs-4 mb-1">My Jobs</h3>
                             </div>
                             <div style="margin-top: -10px;">
-                                <a href="{{ route('job.job') }}" class="btn btn-primary">Post a Job</a>
+                                <a href="{{ route('job.job') }}" class="btn btn-primary">{{__('Post a Job')}}</a>
+                                <a href="#" class="btn btn-primary">{{__('Archived')}}</a>
                             </div>
-
                         </div>
                         <div class="table-responsive">
                             <table class="table ">
@@ -58,6 +58,7 @@
                                                     <ul class="dropdown-menu dropdown-menu-end">
                                                         <li><a class="dropdown-item" href="{{ $job['id'] }}"> <i class="fa fa-eye" aria-hidden="true"></i> View</a></li>
                                                         <li><a class="dropdown-item" href="{{ $job['id'] }}"><i class="fa fa-edit" aria-hidden="true"></i> Edit</a></li>
+                                                        <li><a class="dropdown-item expire-job" href="javascript:void(0)" data-job-id="{{ $job['id'] }}"><i class="fa fa-ban" aria-hidden="true"></i> Expire Job</a></li>
                                                         <li>
                                                             <form action="{{ route('job.delJob', ['id' => $job['id']]) }}" method="post"> @csrf
                                                                 @method('delete')
