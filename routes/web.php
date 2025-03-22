@@ -33,7 +33,8 @@ Route::prefix('job')->name('job.')->middleware([AuthenticateUser::class])->group
     Route::get('/post', [JobListController::class, 'index'])->name('job');
     Route::post('/post', [JobListController::class, 'createJob'])->name('createJob');
     Route::get('/my-jobs', [JobListController::class, 'myJobs'])->name('myJobs');
-    Route::post('/expire-job/{id}', [JobListController::class, 'expireJob'])->name('expireJob');
+    Route::get('/archive-jobs', [JobListController::class, 'archiveJobs'])->name('archiveJobs');
+    Route::post('/archive-job/{id}', [JobListController::class, 'expireJob'])->name('expireJob');
     Route::delete('/{id}', [JobListController::class, 'delJob'])->name('delJob');
     Route::get('/jobs-applied', [JobListController::class, 'appliedJob'])->name('appliedJob');
 });

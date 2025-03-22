@@ -20,6 +20,16 @@ use Illuminate\Support\Facades\Validator;
 
 class JobListController extends Controller
 {
+    private function jobStatusName($jobStatusId)
+    {
+        $name = "";
+        $jobStatusName = DB::table('job_statuses')->select('status')->where('id', $jobStatusId)->first();
+        if ($jobStatusName) {
+            $name = isset($jobStatusName->status) && !empty($jobStatusName->status) ? $jobStatusName->status : "";
+        }
+        return $name;
+    }
+
     public function index()
     {
         $companies = Company::get();
@@ -99,17 +109,19 @@ class JobListController extends Controller
 
     public function myJobs()
     {
-        $allJobs = JobList::where('user_id', Auth::user()->id)->get();
+        $allJobs = JobList::where('user_id', Auth::user()->id)->with('jobStatuses')->get();
         $jobs = [];
         foreach ($allJobs as $key => $job) {
-            $category = Category::select('name')->where('id', $job['location'])->first();
-            $jobType = JobType::select('name')->where('id', $job['job_type_id'])->first();
-            $jobs[$key]['id'] = $job['id'];
-            $jobs[$key]['title'] = $job['title'];
-            $jobs[$key]['location'] = $job['location'];
-            $jobs[$key]['category'] = isset($category->name) ? $category->name : "";
-            $jobs[$key]['job_type'] = isset($jobType->name) ? $jobType->name : "";
-            $jobs[$key]['created_at'] = Carbon::parse($job['created_at'])->toFormattedDateString();
+            if ($job->jobStatuses->job_status_id == 1) {
+                $category = Category::select('name')->where('id', $job['location'])->first();
+                $jobType = JobType::select('name')->where('id', $job['job_type_id'])->first();
+                $jobs[$key]['id'] = $job['id'];
+                $jobs[$key]['title'] = $job['title'];
+                $jobs[$key]['location'] = $job['location'];
+                $jobs[$key]['category'] = isset($category->name) ? $category->name : "";
+                $jobs[$key]['job_type'] = isset($jobType->name) ? $jobType->name : "";
+                $jobs[$key]['created_at'] = Carbon::parse($job['created_at'])->toFormattedDateString();
+            }
         }
 
         return view('front.jobs.myjobs', compact('jobs'));
@@ -138,5 +150,25 @@ class JobListController extends Controller
             "status" => true,
             "message" => "Job status updated successfully",
         ]);
+    }
+
+    public function archiveJobs()
+    {
+        $allJobs = JobList::where('user_id', Auth::user()->id)->with('jobStatuses')->get();
+        $jobs = [];
+        foreach ($allJobs as $key => $job) {
+            if ($job->jobStatuses->job_status_id == 3 || $job->jobStatuses->job_status_id == 2) {
+                $category = Category::select('name')->where('id', $job['location'])->first();
+                $jobType = JobType::select('name')->where('id', $job['job_type_id'])->first();
+                $jobs[$key]['id'] = $job['id'];
+                $jobs[$key]['title'] = $job['title'];
+                $jobs[$key]['location'] = $job['location'];
+                $jobs[$key]['category'] = isset($category->name) ? $category->name : "";
+                $jobs[$key]['job_type'] = isset($jobType->name) ? $jobType->name : "";
+                $jobs[$key]['job_status'] = $this->jobStatusName($job->jobStatuses->job_status_id);
+                $jobs[$key]['created_at'] = Carbon::parse($job['created_at'])->toFormattedDateString();
+            }
+        }
+        return view('front.jobs.archive-jobs', compact('jobs'));
     }
 }

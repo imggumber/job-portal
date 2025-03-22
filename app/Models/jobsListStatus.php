@@ -17,11 +17,11 @@ class JobsListStatus extends Model
 
     public function jobList()
     {
-        $this->belongsTo(JobList::class, 'job_id');
+        $this->belongsTo(JobList::class);
     }
 
     public function JobStatus()
     {
-        $this->belongsTo(JobsListStatus::class, 'job_status_id');
+        $this->belongsTo(JobsListStatus::class);
     }
 }

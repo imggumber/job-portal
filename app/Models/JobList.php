@@ -23,4 +23,9 @@ class JobList extends Model
         "job_type_id",
         "user_id",
     ];
+
+    public function jobStatuses()
+    {
+        return $this->hasOne(JobsListStatus::class, 'job_id');
+    }
 }
