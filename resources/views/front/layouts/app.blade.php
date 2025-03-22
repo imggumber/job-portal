@@ -23,6 +23,19 @@
 		.toast.fade {
 			opacity: 0 !important;
 		}
+
+		#confirm-delete-modal {
+			display: none;
+		}
+
+		#confirm-delete-modal.show {
+			display: block;
+		}
+
+		body.modal-open {
+			overflow: hidden;
+			pointer-events: none;
+		}
 	</style>
 </head>
 
@@ -67,6 +80,9 @@
 
 		<!-- View Company modal -->
 		@include('front.partials.modals.view-company')
+
+		<!-- View delete modal -->
+		@include('front.partials.modals.confirm-delete')
 
 	</main>
 
@@ -161,18 +177,52 @@
 			});
 		});
 
+		// Expire job
+		$(".expire-job, .close-del-modal").off("click").on("click", function() {
+			let jobId = $(this).attr("data-job-id");
+			let confirmDelModal = $("#confirm-delete-modal");
+
+			if (confirmDelModal.hasClass("show")) {
+				$("#del-job-btn").attr("delete-job", "");
+				confirmDelModal.removeClass("show");
+				$("body").removeClass("modal-open");
+			} else {
+				$("#del-job-btn").attr("delete-job", jobId);
+				confirmDelModal.addClass("show");
+				$("body").addClass("modal-open");
+			}
+		});
+
+		// Change job status from active to expire 
+		$("#del-job-btn").on("click", function(e){
+			let jobId = $(this).attr("delete-job");
+			if (jobId != "" || jobId != undefined) {
+				$.ajax({
+					url: '{{ route("job.expireJob", ["id" => "__jobId__"]) }}'.replace('__jobId__', jobId),
+					type: 'post',
+					success: function(response) {
+						let status = response.status;
+						if (status == true) {
+							window.location.reload();
+						}
+					}
+				});
+			}
+		});
+
+
 		// Toaster
 		var toastElList = [].slice.call(document.querySelectorAll('.toast'));
 		var toastList = toastElList.map(function(toastEl) {
-			var toast = new bootstrap.Toast(toastEl); 
-			toast.show(); 
+			var toast = new bootstrap.Toast(toastEl);
+			toast.show();
 
 			setTimeout(function() {
-				toastEl.classList.add('fade'); 
+				toastEl.classList.add('fade');
 				setTimeout(function() {
-					toast.hide(); 
-				}, 5000); 
-			}, 3000); 
+					toast.hide();
+				}, 5000);
+			}, 3000);
 
 			return toast;
 		});
