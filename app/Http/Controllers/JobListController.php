@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Company;
 use App\Models\CompanyJob;
 use App\Models\JobList;
+use App\Models\JobsListStatus;
 use App\Models\JobType;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -75,6 +76,12 @@ class JobListController extends Controller
                 CompanyJob::create([
                     'job_list_id' => $jobList->id,
                     'company_id'  => $request->company,
+                ]);
+
+                JobsListStatus::create([
+                    'job_id' => $jobList->id,
+                    'job_status_id' => 1,
+                    'created_at' => now(),
                 ]);
 
                 DB::commit();
